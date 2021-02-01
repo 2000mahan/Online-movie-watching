@@ -29,10 +29,6 @@
                                 <MenuItem mnemonicParsing="false" text="Open multiple Image"/>
                             </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="User">
-                            <MenuItem mnemonicParsing="false" onAction="#signupAction" text="Sign up"/>
-                            <MenuItem mnemonicParsing="false" onAction="#loginAction" text="login"/>
-                        </Menu>
                     </menus>
                 </MenuBar>
             </children>

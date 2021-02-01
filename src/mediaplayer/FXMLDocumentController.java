@@ -148,17 +148,6 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("disliked");
     }
 
-    @FXML
-    private void signupAction(ActionEvent event) throws IOException {
-        User signUp = new User("Sign up");
-        signUp.start(new Stage());
-    }
-
-    @FXML
-    private void loginAction(ActionEvent event) throws IOException {
-        User signUp = new User("Login");
-        signUp.start(new Stage());
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
