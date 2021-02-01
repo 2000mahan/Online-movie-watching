@@ -1,5 +1,6 @@
 package mediaplayer;
 
+import javafx.application.Application;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
@@ -17,9 +18,11 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -30,61 +33,62 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private MediaView mediaView;
     @FXML
-    private Slider slider; 
+    private Slider slider;
     @FXML
     private Slider volumeSlider;
     private String filePath;
+
     @FXML
     public void handleButtonAction(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
-                "Select a Media File (*.mp4)","*.mp4");
+                "Select a Media File (*.mp4)", "*.mp4");
         fileChooser.getExtensionFilters().add(filter);
         File file = fileChooser.showOpenDialog(null);
         filePath = file.toURI().toString();
-        if(filePath != null){
+        if (filePath != null) {
             Media media = new Media(filePath);
             mediaPlayer = new MediaPlayer(media);
             mediaView.setMediaPlayer(mediaPlayer);
-            
+
             //DoubleProperty width = mediaView.fitWidthProperty();
             //DoubleProperty height = mediaView.fitHeightProperty();
-            
-           //width.bind(Bindings.selectDouble(mediaView.sceneProperty(),"width"));
-           //height.bind(Bindings.selectDouble(mediaView.sceneProperty(),"height"));
-          
-            
-            //MediaView mv = new MediaView(videoPlayer);
-        DoubleProperty mvw = mediaView.fitWidthProperty();
-        DoubleProperty mvh = mediaView.fitHeightProperty();
-        mvw.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
-        mvh.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
-        mediaView.setPreserveRatio(true);
 
-        mediaView.setViewport(Rectangle2D.EMPTY);
-        mediaPlayer.play();
-        mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
-                        @Override
-                        public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
-                            slider.setValue(newValue.toSeconds());
-                        }
-                    });
-        slider.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent event) {
-                            mediaPlayer.seek(Duration.seconds(slider.getValue()));
-                        }
-                    });
-        
-        volumeSlider.setValue(mediaPlayer.getVolume()*100);
-        volumeSlider.valueProperty().addListener(new InvalidationListener() {
+            //width.bind(Bindings.selectDouble(mediaView.sceneProperty(),"width"));
+            //height.bind(Bindings.selectDouble(mediaView.sceneProperty(),"height"));
+
+
+            //MediaView mv = new MediaView(videoPlayer);
+            DoubleProperty mvw = mediaView.fitWidthProperty();
+            DoubleProperty mvh = mediaView.fitHeightProperty();
+            mvw.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
+            mvh.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
+            mediaView.setPreserveRatio(true);
+
+            mediaView.setViewport(Rectangle2D.EMPTY);
+            mediaPlayer.play();
+            mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
                 @Override
-                public void invalidated(Observable observable) {
-                    mediaPlayer.setVolume(volumeSlider.getValue()/100);
+                public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
+                    slider.setValue(newValue.toSeconds());
                 }
             });
-        
- //Slider speedSlider = initializeSlider();
+            slider.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    mediaPlayer.seek(Duration.seconds(slider.getValue()));
+                }
+            });
+
+            volumeSlider.setValue(mediaPlayer.getVolume() * 100);
+            volumeSlider.valueProperty().addListener(new InvalidationListener() {
+                @Override
+                public void invalidated(Observable observable) {
+                    mediaPlayer.setVolume(volumeSlider.getValue() / 100);
+                }
+            });
+
+            //Slider speedSlider = initializeSlider();
 
         }
     }
@@ -93,42 +97,73 @@ public class FXMLDocumentController implements Initializable {
 //       return mediaPlayer;
 //   }
 
- @FXML
-    private void playVideo(ActionEvent event){
+    @FXML
+    private void playVideo(ActionEvent event) {
 
         mediaPlayer.play();
     }
+
     @FXML
-    private void pauseVideo(ActionEvent event){
+    private void pauseVideo(ActionEvent event) {
         mediaPlayer.pause();
     }
+
     @FXML
-    private void stopVideo(ActionEvent event){
+    private void stopVideo(ActionEvent event) {
         mediaPlayer.stop();
     }
+
     @FXML
-    private void fastVideo(ActionEvent event){
+    private void fastVideo(ActionEvent event) {
         mediaPlayer.setRate(1.5);
     }
+
     @FXML
-    private void slowVideo(ActionEvent event){
+    private void slowVideo(ActionEvent event) {
         mediaPlayer.setRate(.75);
     }
+
     @FXML
-    private void fasterVideo(ActionEvent event){
+    private void fasterVideo(ActionEvent event) {
         mediaPlayer.setRate(2);
     }
+
     @FXML
-    private void slowerVideo(ActionEvent event){
+    private void slowerVideo(ActionEvent event) {
         mediaPlayer.setRate(.5);
     }
+
     @FXML
-    private void exitVideo(ActionEvent event){
+    private void exitVideo(ActionEvent event) {
         System.exit(0);
-    }    
+    }
+
+    @FXML
+    private void likeVideo(ActionEvent event) {
+        System.out.println("liked");
+    }
+
+    @FXML
+    private void dislikeVideo(ActionEvent event) {
+        System.out.println("disliked");
+    }
+
+    @FXML
+    private void signupAction(ActionEvent event) throws IOException {
+        User signUp = new User("Sign up");
+        signUp.start(new Stage());
+    }
+
+    @FXML
+    private void loginAction(ActionEvent event) throws IOException {
+        User signUp = new User("Login");
+        signUp.start(new Stage());
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
+    }
+
+
 }
