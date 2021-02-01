@@ -21,12 +21,12 @@ import java.io.IOException;
 public class UserGUI extends Application {
     private final StackPane root = new StackPane();
     private final String type;
-    Button button;
-    VBox vBox = new VBox();
-    TextField username = new TextField();
-    PasswordField password = new PasswordField();
-    Label usernameLabel = new Label("Your Username");
-    Label passwordLabel = new Label("Your Password");
+    private final Button button;
+    private final VBox vBox = new VBox();
+    private final TextField username = new TextField();
+    private final PasswordField password = new PasswordField();
+    private final Label usernameLabel = new Label("Your Username");
+    private final Label passwordLabel = new Label("Your Password");
 
     public UserGUI(String type) throws IOException {
         this.type = type;
@@ -157,4 +157,5 @@ public class UserGUI extends Application {
     public String getUsername() {
         return username.getText();
     }
+
 }

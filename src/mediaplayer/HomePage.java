@@ -1,15 +1,14 @@
 package mediaplayer;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -20,6 +19,7 @@ import javafx.stage.WindowEvent;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HomePage extends Application {
     private final StackPane root = new StackPane();
@@ -27,9 +27,10 @@ public class HomePage extends Application {
     static FileWriter databaseWriter;
     static ArrayList<String> users = new ArrayList<>();
     static HashMap<String, String> userAndPass = new HashMap<>();
-    Media media;
-    MediaPlayer mediaPlayer;
-    boolean playing = false;
+    private MediaPlayer mediaPlayer;
+    private boolean playing = false;
+    private User user = null;
+
 
     static {
         try {
@@ -53,7 +54,6 @@ public class HomePage extends Application {
         // login and sign up
         Button login_button = new Button("Login");
         Button signup_button = new Button("Sign up");
-        // Button tmp = new Button("Sign up");
 
         login_button.setPrefWidth(100);
         signup_button.setPrefWidth(100);
@@ -68,7 +68,7 @@ public class HomePage extends Application {
         StackPane.setMargin(signup_button, new Insets(15, 10, 10, 30));
         StackPane.setMargin(login_button, new Insets(15, 10, 10, 150));
 
-        signup_button.setOnAction(actionEvent -> {
+        signup_button.setOnMouseClicked(actionEvent -> {
             UserGUI signup = null;
             try {
                 signup = new UserGUI("Sign up");
@@ -77,10 +77,11 @@ public class HomePage extends Application {
             }
             assert signup != null;
             signup.start(new Stage());
+            user = new User(signup.getUsername());
         });
 
 
-        login_button.setOnAction(actionEvent -> {
+        login_button.setOnMouseClicked(actionEvent -> {
             UserGUI login = null;
             try {
                 login = new UserGUI("Login");
@@ -89,13 +90,8 @@ public class HomePage extends Application {
             }
             assert login != null;
             login.start(new Stage());
-            Label welcome = new Label("Welcome dear" + login.getUsername());
-            welcome.setPadding(new Insets(20, 20, 20, 20));
-            welcome.setStyle("-fx-text-fill: blue;");
-            root.getChildren().add(welcome);
-            StackPane.setAlignment(welcome, Pos.TOP_LEFT);
+            user = new User(login.getUsername());
         });
-
 
         // movies
         Rectangle r = new Rectangle();
@@ -116,8 +112,11 @@ public class HomePage extends Application {
         StackPane.setAlignment(movie1, Pos.CENTER_LEFT);
         StackPane.setMargin(movie1, new Insets(0, 0, 0, 10));
 
+
         movie1.setOnAction(actionEvent -> {
-            playSelected("movies/Inception.mp4");
+            if (user != null) {
+                playSelected("movies/Inception.mp4");
+            }
         });
 
         Button movie2 = new Button("");
@@ -132,7 +131,9 @@ public class HomePage extends Application {
         StackPane.setMargin(movie2, new Insets(0, 0, 0, 375));
 
         movie2.setOnAction(actionEvent -> {
-            playSelected("movies/WoW.mp4");
+            if (user != null) {
+                playSelected("movies/WoW.mp4");
+            }
         });
 
         Button movie3 = new Button("");
@@ -147,7 +148,11 @@ public class HomePage extends Application {
         StackPane.setMargin(movie3, new Insets(0, 0, 0, 740));
 
         movie3.setOnAction(actionEvent -> {
-            playSelected("movies/Peaky.mp4");
+            if (user != null) {
+                playSelected("movies/Peaky.mp4");
+            } else {
+
+            }
         });
     }
 
@@ -163,7 +168,7 @@ public class HomePage extends Application {
     }
 
     public void playSelected(String path) {
-        if (playing){
+        if (playing) {
             mediaPlayer.stop();
             playing = false;
         }
@@ -180,7 +185,7 @@ public class HomePage extends Application {
         Scene scene = new Scene(root, 1100, 600);
 
 // create media player
-        media = new Media(new File(path).toURI().toString());
+        Media media = new Media(new File(path).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         playing = true;
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
@@ -188,6 +193,8 @@ public class HomePage extends Application {
         MediaControl mediaControl = new MediaControl(mediaPlayer);
         scene.setRoot(mediaControl);
         // create mediaView and add media player to the viewer
+//        primaryStage.minWidthProperty().bind(scene.heightProperty().multiply(2));
+//        primaryStage.minHeightProperty().bind(scene.widthProperty().divide(2));
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
 
