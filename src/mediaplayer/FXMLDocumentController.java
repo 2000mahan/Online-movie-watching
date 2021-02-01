@@ -51,14 +51,6 @@ public class FXMLDocumentController implements Initializable {
             mediaPlayer = new MediaPlayer(media);
             mediaView.setMediaPlayer(mediaPlayer);
 
-            //DoubleProperty width = mediaView.fitWidthProperty();
-            //DoubleProperty height = mediaView.fitHeightProperty();
-
-            //width.bind(Bindings.selectDouble(mediaView.sceneProperty(),"width"));
-            //height.bind(Bindings.selectDouble(mediaView.sceneProperty(),"height"));
-
-
-            //MediaView mv = new MediaView(videoPlayer);
             DoubleProperty mvw = mediaView.fitWidthProperty();
             DoubleProperty mvh = mediaView.fitHeightProperty();
             mvw.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
@@ -87,15 +79,8 @@ public class FXMLDocumentController implements Initializable {
                     mediaPlayer.setVolume(volumeSlider.getValue() / 100);
                 }
             });
-
-            //Slider speedSlider = initializeSlider();
-
         }
     }
-
-//  public   MediaPlayer getMediaplayer(){
-//       return mediaPlayer;
-//   }
 
     @FXML
     private void playVideo(ActionEvent event) {

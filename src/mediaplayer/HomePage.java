@@ -1,23 +1,23 @@
 package mediaplayer;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Circle;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.*;
-import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,6 +27,9 @@ public class HomePage extends Application {
     static FileWriter databaseWriter;
     static ArrayList<String> users = new ArrayList<>();
     static HashMap<String, String> userAndPass = new HashMap<>();
+    Media media;
+    MediaPlayer mediaPlayer;
+    boolean playing = false;
 
     static {
         try {
@@ -104,7 +107,7 @@ public class HomePage extends Application {
         r.setArcHeight(10);
         Button movie1 = new Button("");
         movie1.setShape(r);
-        BackgroundImage backgroundImage1 = new BackgroundImage(new Image(getClass().getResource("inception.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        BackgroundImage backgroundImage1 = new BackgroundImage(new Image(getClass().getResource("pics/inception.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         Background background1 = new Background(backgroundImage1);
         movie1.setBackground(background1);
         movie1.setPrefWidth(350);
@@ -113,10 +116,13 @@ public class HomePage extends Application {
         StackPane.setAlignment(movie1, Pos.CENTER_LEFT);
         StackPane.setMargin(movie1, new Insets(0, 0, 0, 10));
 
+        movie1.setOnAction(actionEvent -> {
+            playSelected("movies/Inception.mp4");
+        });
 
         Button movie2 = new Button("");
         movie2.setShape(r);
-        BackgroundImage backgroundImage2 = new BackgroundImage(new Image(getClass().getResource("WoW.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        BackgroundImage backgroundImage2 = new BackgroundImage(new Image(getClass().getResource("pics/WoW.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         Background background2 = new Background(backgroundImage2);
         movie2.setBackground(background2);
         movie2.setPrefWidth(350);
@@ -125,10 +131,13 @@ public class HomePage extends Application {
         StackPane.setAlignment(movie2, Pos.CENTER_LEFT);
         StackPane.setMargin(movie2, new Insets(0, 0, 0, 375));
 
+        movie2.setOnAction(actionEvent -> {
+            playSelected("movies/WoW.mp4");
+        });
 
         Button movie3 = new Button("");
         movie3.setShape(r);
-        BackgroundImage backgroundImage3 = new BackgroundImage(new Image(getClass().getResource("peaky.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        BackgroundImage backgroundImage3 = new BackgroundImage(new Image(getClass().getResource("pics/peaky.jpg").toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         Background background3 = new Background(backgroundImage3);
         movie3.setBackground(background3);
         movie3.setPrefWidth(350);
@@ -137,6 +146,9 @@ public class HomePage extends Application {
         StackPane.setAlignment(movie3, Pos.CENTER_LEFT);
         StackPane.setMargin(movie3, new Insets(0, 0, 0, 740));
 
+        movie3.setOnAction(actionEvent -> {
+            playSelected("movies/Peaky.mp4");
+        });
     }
 
 
@@ -148,5 +160,37 @@ public class HomePage extends Application {
         stage.setScene(scene);
         stage.show();
         stage.setTitle("Home page");
+    }
+
+    public void playSelected(String path) {
+        if (playing){
+            mediaPlayer.stop();
+            playing = false;
+        }
+        Stage primaryStage = new Stage();
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                mediaPlayer.stop();
+                primaryStage.close();
+            }
+        });
+        primaryStage.setTitle("Embedded Media Player");
+        Group root = new Group();
+        Scene scene = new Scene(root, 1100, 600);
+
+// create media player
+        media = new Media(new File(path).toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
+        playing = true;
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.setAutoPlay(true);
+        MediaControl mediaControl = new MediaControl(mediaPlayer);
+        scene.setRoot(mediaControl);
+        // create mediaView and add media player to the viewer
+        primaryStage.setScene(scene);
+        primaryStage.sizeToScene();
+
+        primaryStage.show();
     }
 }

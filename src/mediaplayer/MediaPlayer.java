@@ -8,13 +8,13 @@ import javafx.stage.Stage;
 
 
 public class MediaPlayer extends Application {
-    User user;
+//    User user;
+//
+//    public MediaPlayer(User user) {
+//        this.user = user;
+//    }
 
-    public MediaPlayer(User user) {
-        this.user = user;
-    }
-
-    @Override
+    //@Override
     public void start(Stage stage) throws Exception {
 
         Parent root = FXMLLoader.load(getClass().getResource(
@@ -26,8 +26,8 @@ public class MediaPlayer extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+//    public static void main(String[] args) {
+//        launch(args);
+//    }
 
 }
