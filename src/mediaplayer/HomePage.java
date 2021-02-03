@@ -184,7 +184,7 @@ public class HomePage extends Application {
         Group root = new Group();
         Scene scene = new Scene(root, 1100, 600);
 
-// create media player
+
         Media media = new Media(new File(path).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         playing = true;
@@ -192,9 +192,7 @@ public class HomePage extends Application {
         mediaPlayer.setAutoPlay(true);
         MediaControl mediaControl = new MediaControl(mediaPlayer);
         scene.setRoot(mediaControl);
-        // create mediaView and add media player to the viewer
-//        primaryStage.minWidthProperty().bind(scene.heightProperty().multiply(2));
-//        primaryStage.minHeightProperty().bind(scene.widthProperty().divide(2));
+
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
 
