@@ -8,11 +8,6 @@ import javafx.stage.Stage;
 
 
 public class MediaPlayer extends Application {
-//    User user;
-//
-//    public MediaPlayer(User user) {
-//        this.user = user;
-//    }
 
     //@Override
     public void start(Stage stage) throws Exception {
@@ -26,8 +21,5 @@ public class MediaPlayer extends Application {
         stage.show();
     }
 
-//    public static void main(String[] args) {
-//        launch(args);
-//    }
 
 }
