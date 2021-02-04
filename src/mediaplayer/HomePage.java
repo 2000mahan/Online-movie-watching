@@ -8,7 +8,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -19,7 +18,6 @@ import javafx.stage.WindowEvent;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HomePage extends Application {
     private final StackPane root = new StackPane();
@@ -150,8 +148,6 @@ public class HomePage extends Application {
         movie3.setOnAction(actionEvent -> {
             if (user != null) {
                 playSelected("movies/Peaky.mp4");
-            } else {
-
             }
         });
     }
@@ -176,6 +172,7 @@ public class HomePage extends Application {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
+                playing = false;
                 mediaPlayer.stop();
                 primaryStage.close();
             }
@@ -184,7 +181,7 @@ public class HomePage extends Application {
         Group root = new Group();
         Scene scene = new Scene(root, 1100, 600);
 
-
+// create media player
         Media media = new Media(new File(path).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         playing = true;
@@ -192,7 +189,7 @@ public class HomePage extends Application {
         mediaPlayer.setAutoPlay(true);
         MediaControl mediaControl = new MediaControl(mediaPlayer);
         scene.setRoot(mediaControl);
-
+        // create mediaView and add media player to the viewer
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
 

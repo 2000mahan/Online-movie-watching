@@ -52,14 +52,14 @@ public class MediaControl extends BorderPane {
                 MediaPlayer.Status status = mp.getStatus();
 
                 if (status == MediaPlayer.Status.UNKNOWN || status == MediaPlayer.Status.HALTED) {
-
+                    // don't do anything in these states
                     return;
                 }
 
                 if (status == MediaPlayer.Status.PAUSED
                         || status == MediaPlayer.Status.READY
                         || status == MediaPlayer.Status.STOPPED) {
-
+                    // rewind the movie if we're sitting at the end
                     if (atEndOfMedia) {
                         mp.seek(mp.getStartTime());
                         atEndOfMedia = false;
